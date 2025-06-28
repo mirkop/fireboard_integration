@@ -209,7 +209,10 @@ class FireBoardDrivePercentSensor(CoordinatorEntity, Entity):
         if value is None:
             return "--"
         try:
-            return round(float(value) * 100, 1)
+            percent = round(float(value) * 100, 1)
+            if percent == 0:
+                return "--"
+            return percent
         except Exception:
             return value
 
