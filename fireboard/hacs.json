@@ -1,0 +1,19 @@
+{
+  "name": "FireBoard Home Assistant Integration",
+  "description": "Integrate FireBoard Cloud devices and sensors with Home Assistant.",
+  "version": "0.1.0",
+  "min_homeassistant_version": "2025.1.0",
+  "keywords": [
+    "fireboard",
+    "bbq",
+    "temperature",
+    "cloud",
+    "sensors"
+  ],
+  "documentation": "https://github.com/mirkop/fireboard_integration/blob/main/fireboard/README.md",
+  "issue_tracker": "https://github.com/mirkop/fireboard_integration/issues",
+  "codeowners": [
+    "@mirkop"
+  ],
+  "config_flow": true
+}
