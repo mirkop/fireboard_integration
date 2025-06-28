@@ -1,0 +1,28 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Connect to FireBoard Cloud",
+        "description": "Enter your FireBoard credentials.",
+        "data": {
+          "username": "Username",
+          "password": "Password",
+          "update_interval": "Update Interval (seconds, min 18)"
+        },
+        "errors": {
+          "auth": "Invalid username or password."
+        }
+      }
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "FireBoard Options",
+        "data": {
+          "update_interval": "Update Interval (seconds, min 18)"
+        }
+      }
+    }
+  }
+}

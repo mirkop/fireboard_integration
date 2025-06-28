@@ -1,0 +1,10 @@
+{
+  "domain": "fireboard",
+  "name": "FireBoard Cloud",
+  "version": "0.1.0",
+  "documentation": "https://github.com/yourusername/fireboard-homeassistant",
+  "requirements": [ ],
+  "dependencies": [ ],
+  "config_flow": true,
+  "codeowners": [ "@yourusername" ]
+}
