@@ -22,8 +22,6 @@ async def async_setup_entry(hass, entry, async_add_entities):
             # Add drive data sensors if drive data is present
             drive_data = coordinator.drive_data.get(uuid)
             if drive_data:
-                entities.append(FireBoardDrivePowerModeSensor(coordinator, device, drive_data))
-                entities.append(FireBoardDriveModeTypeSensor(coordinator, device, drive_data))
                 entities.append(FireBoardDrivePercentSensor(coordinator, device, drive_data))
                 entities.append(FireBoardDriveSetpointSensor(coordinator, device, drive_data))
     except Exception as e:
@@ -178,72 +176,6 @@ class FireBoardBatterySensor(Entity):
             return "mdi:battery-10"
         else:
             return "mdi:battery-outline"
-
-class FireBoardDrivePowerModeSensor(Entity):
-    def __init__(self, coordinator, device, drive_data):
-        self.coordinator = coordinator
-        self._device = device
-        self._drive_data = drive_data
-        self._attr_name = f"{device['title']} Drive Power Mode"
-        self._attr_unique_id = f"{device['uuid']}_drive_powermode"
-
-    @property
-    def name(self):
-        return self._attr_name
-
-    @property
-    def unique_id(self):
-        return self._attr_unique_id
-
-    @property
-    def state(self):
-        return self._drive_data.get("powermode", "--")
-
-    @property
-    def device_info(self):
-        return {
-            "identifiers": {(DOMAIN, self._device["uuid"])} ,
-            "name": self._device["title"],
-            "model": self._device["model"],
-            "manufacturer": "FireBoard",
-        }
-
-    @property
-    def icon(self):
-        return "mdi:fan"
-
-class FireBoardDriveModeTypeSensor(Entity):
-    def __init__(self, coordinator, device, drive_data):
-        self.coordinator = coordinator
-        self._device = device
-        self._drive_data = drive_data
-        self._attr_name = f"{device['title']} Drive Mode Type"
-        self._attr_unique_id = f"{device['uuid']}_drive_modetype"
-
-    @property
-    def name(self):
-        return self._attr_name
-
-    @property
-    def unique_id(self):
-        return self._attr_unique_id
-
-    @property
-    def state(self):
-        return self._drive_data.get("modetype", "--")
-
-    @property
-    def device_info(self):
-        return {
-            "identifiers": {(DOMAIN, self._device["uuid"])} ,
-            "name": self._device["title"],
-            "model": self._device["model"],
-            "manufacturer": "FireBoard",
-        }
-
-    @property
-    def icon(self):
-        return "mdi:fan"
 
 class FireBoardDrivePercentSensor(Entity):
     def __init__(self, coordinator, device, drive_data):
