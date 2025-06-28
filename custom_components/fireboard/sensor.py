@@ -24,6 +24,7 @@ async def async_setup_entry(hass, entry, async_add_entities):
             if drive_data:
                 entities.append(FireBoardDrivePercentSensor(coordinator, device, drive_data))
                 entities.append(FireBoardDriveSetpointSensor(coordinator, device, drive_data))
+                entities.append(FireBoardDriveLidPausedSensor(coordinator, device, drive_data))
     except Exception as e:
         _LOGGER.error("FireBoard async_setup_entry failed: %s", e)
     async_add_entities(entities)
@@ -260,3 +261,42 @@ class FireBoardDriveSetpointSensor(Entity):
     @property
     def icon(self):
         return "mdi:fan"
+
+class FireBoardDriveLidPausedSensor(Entity):
+    def __init__(self, coordinator, device, drive_data):
+        self.coordinator = coordinator
+        self._device = device
+        self._drive_data = drive_data
+        self._attr_name = f"{device['title']} Grill Lid"
+        self._attr_unique_id = f"{device['uuid']}_drive_lidpaused"
+
+    @property
+    def name(self):
+        return self._attr_name
+
+    @property
+    def unique_id(self):
+        return self._attr_unique_id
+
+    @property
+    def state(self):
+        value = self._drive_data.get("lidpaused")
+        if value is None:
+            return "--"
+        return "Open" if value else "Closed"
+
+    @property
+    def device_info(self):
+        return {
+            "identifiers": {(DOMAIN, self._device["uuid"])} ,
+            "name": self._device["title"],
+            "model": self._device["model"],
+            "manufacturer": "FireBoard",
+        }
+
+    @property
+    def icon(self):
+        value = self._drive_data.get("lidpaused")
+        if value:
+            return "mdi:grill-outline"
+        return "mdi:grill"
