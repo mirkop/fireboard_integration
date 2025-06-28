@@ -15,8 +15,10 @@ This repository uses a custom Copilot prompt to help contributors write code tha
 - Write concise, well-documented code and avoid unnecessary complexity.
 - Ensure all new entities are properly associated with their parent device.
 - Use `mdi:` icons for Home Assistant entities.
-- Version numbers should be in the format `YYYY.MM.DD.000` for releases. Zero pad the month and day if necessary. `000` is a three digit zero padded commit number.
-- Update the version number in `hacs.json` and `manifest.json` files with each commit.
+- Version numbers should be in the format `YYYY.MM.DD.COMMIT_COUNT` for commits.
+- Zero pad the month and day in the version number if necessary.
+- The version's `COMMIT_COUNT` is a three digit zero padded commit number.
+- Update the version number in the `hacs.json` and `manifest.json` files with each commit. Do not update this file.
 
 ## References
 - [FireBoard Cloud API Documentation](https://docs.fireboard.io/app/api.html)
