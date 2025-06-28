@@ -1,0 +1,16 @@
+// REST Endpoint: GET https://fireboard.io/api/v1/devices/<UUID>/drivelog.json
+{
+    "powermode": "N/A",
+    "lidpaused": false,
+    "created_ms": 1751134488000.0,
+    "device_uuid": "fdff7eb8-c93f-4256-bf0c-e588392cbe37",
+    "modetype": "Off",
+    "created": "2025-06-28T18:14:48+00:00",
+    "tieddevice": "fdff7eb8-c93f-4256-bf0c-e588392cbe37",
+    "driveper": 0.1,
+    "userinitiated": 0,
+    "setpoint": 100.0,
+    "degreetype": 2,
+    "device_id": 108177,
+    "tiedchannel": 6
+}
