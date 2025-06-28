@@ -25,6 +25,7 @@ async def async_setup_entry(hass, entry, async_add_entities):
                 entities.append(FireBoardDrivePercentSensor(coordinator, device, drive_data))
                 entities.append(FireBoardDriveSetpointSensor(coordinator, device, drive_data))
                 entities.append(FireBoardDriveLidPausedSensor(coordinator, device, drive_data))
+                entities.append(FireBoardDriveControlChannelSensor(coordinator, device, drive_data))
     except Exception as e:
         _LOGGER.error("FireBoard async_setup_entry failed: %s", e)
     async_add_entities(entities)
@@ -300,3 +301,39 @@ class FireBoardDriveLidPausedSensor(Entity):
         if value is True:
             return "mdi:grill-outline"
         return "mdi:grill"
+
+class FireBoardDriveControlChannelSensor(Entity):
+    def __init__(self, coordinator, device, drive_data):
+        self.coordinator = coordinator
+        self._device = device
+        self._drive_data = drive_data
+        self._attr_name = f"{device['title']} Control Channel"
+        self._attr_unique_id = f"{device['uuid']}_drive_control_channel"
+
+    @property
+    def name(self):
+        return self._attr_name
+
+    @property
+    def unique_id(self):
+        return self._attr_unique_id
+
+    @property
+    def state(self):
+        value = self._drive_data.get("tiedchannel")
+        if value is None:
+            return "--"
+        return f"Ch {value}"
+
+    @property
+    def device_info(self):
+        return {
+            "identifiers": {(DOMAIN, self._device["uuid"])} ,
+            "name": self._device["title"],
+            "model": self._device["model"],
+            "manufacturer": "FireBoard",
+        }
+
+    @property
+    def icon(self):
+        return "mdi:link-variant"
