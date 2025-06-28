@@ -1,4 +1,5 @@
 from homeassistant.helpers.entity import Entity
+from homeassistant.helpers.update_coordinator import CoordinatorEntity
 from homeassistant.components.binary_sensor import BinarySensorEntity
 from homeassistant.components.number import NumberEntity
 from .const import DOMAIN
@@ -22,16 +23,17 @@ async def async_setup_entry(hass, entry, async_add_entities):
             # Add drive data sensors if drive data is present
             drive_data = coordinator.drive_data.get(uuid)
             if drive_data:
-                entities.append(FireBoardDrivePercentSensor(coordinator, device, drive_data))
-                entities.append(FireBoardDriveSetpointSensor(coordinator, device, drive_data))
-                entities.append(FireBoardDriveLidPausedSensor(coordinator, device, drive_data))
-                entities.append(FireBoardDriveControlChannelSensor(coordinator, device, drive_data))
+                entities.append(FireBoardDrivePercentSensor(coordinator, device))
+                entities.append(FireBoardDriveSetpointSensor(coordinator, device))
+                entities.append(FireBoardDriveLidPausedSensor(coordinator, device))
+                entities.append(FireBoardDriveControlChannelSensor(coordinator, device))
     except Exception as e:
         _LOGGER.error("FireBoard async_setup_entry failed: %s", e)
     async_add_entities(entities)
 
-class FireBoardChannelSensor(Entity):
+class FireBoardChannelSensor(CoordinatorEntity, Entity):
     def __init__(self, coordinator, device, channel):
+        super().__init__(coordinator)
         self.coordinator = coordinator
         self._device = device
         self._channel = channel
@@ -100,8 +102,9 @@ class FireBoardChannelSensor(Entity):
     async def async_update(self):
         await self.coordinator.async_request_refresh()
 
-class FireBoardBatterySensor(Entity):
+class FireBoardBatterySensor(CoordinatorEntity, Entity):
     def __init__(self, coordinator, device):
+        super().__init__(coordinator)
         self.coordinator = coordinator
         self._device = device
         self._attr_name = f"{device['title']} Battery"
@@ -179,11 +182,11 @@ class FireBoardBatterySensor(Entity):
         else:
             return "mdi:battery-outline"
 
-class FireBoardDrivePercentSensor(Entity):
-    def __init__(self, coordinator, device, drive_data):
+class FireBoardDrivePercentSensor(CoordinatorEntity, Entity):
+    def __init__(self, coordinator, device):
+        super().__init__(coordinator)
         self.coordinator = coordinator
         self._device = device
-        self._drive_data = drive_data
         self._attr_name = f"{device['title']} Drive %"
         self._attr_unique_id = f"{device['uuid']}_drive_per"
 
@@ -197,7 +200,9 @@ class FireBoardDrivePercentSensor(Entity):
 
     @property
     def state(self):
-        value = self._drive_data.get("driveper")
+        uuid = self._device["uuid"]
+        drive_data = self.coordinator.drive_data.get(uuid) or {}
+        value = drive_data.get("driveper")
         if value is None:
             return "--"
         try:
@@ -222,11 +227,11 @@ class FireBoardDrivePercentSensor(Entity):
     def icon(self):
         return "mdi:fan"
 
-class FireBoardDriveSetpointSensor(Entity):
-    def __init__(self, coordinator, device, drive_data):
+class FireBoardDriveSetpointSensor(CoordinatorEntity, Entity):
+    def __init__(self, coordinator, device):
+        super().__init__(coordinator)
         self.coordinator = coordinator
         self._device = device
-        self._drive_data = drive_data
         self._attr_name = f"{device['title']} Drive Setpoint"
         self._attr_unique_id = f"{device['uuid']}_drive_setpoint"
 
@@ -240,7 +245,9 @@ class FireBoardDriveSetpointSensor(Entity):
 
     @property
     def state(self):
-        value = self._drive_data.get("setpoint")
+        uuid = self._device["uuid"]
+        drive_data = self.coordinator.drive_data.get(uuid) or {}
+        value = drive_data.get("setpoint")
         if value is None or value == 0:
             return "--"
         return value
@@ -263,11 +270,11 @@ class FireBoardDriveSetpointSensor(Entity):
     def icon(self):
         return "mdi:fan"
 
-class FireBoardDriveLidPausedSensor(Entity):
-    def __init__(self, coordinator, device, drive_data):
+class FireBoardDriveLidPausedSensor(CoordinatorEntity, Entity):
+    def __init__(self, coordinator, device):
+        super().__init__(coordinator)
         self.coordinator = coordinator
         self._device = device
-        self._drive_data = drive_data
         self._attr_name = f"{device['title']} Grill Lid"
         self._attr_unique_id = f"{device['uuid']}_drive_lidpaused"
 
@@ -281,7 +288,9 @@ class FireBoardDriveLidPausedSensor(Entity):
 
     @property
     def state(self):
-        value = self._drive_data.get("lidpaused")
+        uuid = self._device["uuid"]
+        drive_data = self.coordinator.drive_data.get(uuid) or {}
+        value = drive_data.get("lidpaused")
         if value is None:
             return "--"
         return "Open" if value else "Closed"
@@ -297,16 +306,18 @@ class FireBoardDriveLidPausedSensor(Entity):
 
     @property
     def icon(self):
-        value = self._drive_data.get("lidpaused")
+        uuid = self._device["uuid"]
+        drive_data = self.coordinator.drive_data.get(uuid) or {}
+        value = drive_data.get("lidpaused")
         if value is True:
             return "mdi:grill-outline"
         return "mdi:grill"
 
-class FireBoardDriveControlChannelSensor(Entity):
-    def __init__(self, coordinator, device, drive_data):
+class FireBoardDriveControlChannelSensor(CoordinatorEntity, Entity):
+    def __init__(self, coordinator, device):
+        super().__init__(coordinator)
         self.coordinator = coordinator
         self._device = device
-        self._drive_data = drive_data
         self._attr_name = f"{device['title']} Control Channel"
         self._attr_unique_id = f"{device['uuid']}_drive_control_channel"
 
@@ -320,7 +331,9 @@ class FireBoardDriveControlChannelSensor(Entity):
 
     @property
     def state(self):
-        value = self._drive_data.get("tiedchannel")
+        uuid = self._device["uuid"]
+        drive_data = self.coordinator.drive_data.get(uuid) or {}
+        value = drive_data.get("tiedchannel")
         if value is None:
             return "--"
         return f"Ch {value}"
