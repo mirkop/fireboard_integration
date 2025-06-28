@@ -10,7 +10,7 @@
     "cloud",
     "sensors"
   ],
-  "documentation": "https://github.com/mirkop/fireboard_integration/blob/main/fireboard/README.md",
+  "documentation": "https://github.com/mirkop/fireboard_integration/blob/main/README.md",
   "issue_tracker": "https://github.com/mirkop/fireboard_integration/issues",
   "codeowners": [
     "@mirkop"
