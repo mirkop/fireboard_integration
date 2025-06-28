@@ -297,6 +297,6 @@ class FireBoardDriveLidPausedSensor(Entity):
     @property
     def icon(self):
         value = self._drive_data.get("lidpaused")
-        if value:
+        if value is True:
             return "mdi:grill-outline"
         return "mdi:grill"
