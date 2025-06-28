@@ -18,11 +18,12 @@ class FireBoardPollingSwitch(CoordinatorEntity, SwitchEntity):
         super().__init__(coordinator)
         self._device = device
         self._hardware_id = hardware_id
-        self._attr_name = "FireBoard Updates"
+        self._attr_name = "FireBoard Cloud Polling"
         self.entity_id = f"switch.fireboard_updates_{hardware_id}"
         self._attr_unique_id = f"{device['uuid']}_polling_switch"
-        # Default to polling enabled
-        self._is_on = True
+        # Default to polling disabled
+        self._is_on = False
+        self.coordinator.set_polling(self._hardware_id, False)
 
     @property
     def is_on(self):
