@@ -1,7 +1,7 @@
 {
   "domain": "fireboard",
   "name": "FireBoard Cloud",
-  "version": "2025.06.28",
+  "version": "2025.06.28.001",
   "documentation": "https://github.com/mirkop/fireboard_integration/blob/main/README.md",
   "requirements": [ ],
   "dependencies": [ ],
