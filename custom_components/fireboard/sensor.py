@@ -40,10 +40,13 @@ class FireBoardChannelSensor(CoordinatorEntity, Entity):
         model = device.get("model")
         channel_label = channel.get("channel_label")
         channel_num = channel.get("channel")
+        hardware_id = device.get("hardware_id")
         if model in ("FBX11", "FBX2", "FBX2D") and channel_label:
             self._attr_name = f"Ch {channel_num}: {channel_label}"
         else:
             self._attr_name = f"{device['title']} {channel_label or channel_num}"
+        # entity_id: ch_<channel>_<hardware_id>
+        self.entity_id = f"sensor.ch_{channel_num}_{hardware_id}"
         self._attr_unique_id = f"{device['uuid']}_ch{channel.get('id')}"
         self._degreetype = device.get("degreetype", 2)  # 1 = C, 2 = F
 
@@ -66,7 +69,7 @@ class FireBoardChannelSensor(CoordinatorEntity, Entity):
     @property
     def device_info(self):
         return {
-            "identifiers": {(DOMAIN, self._device["uuid"])} ,
+            "identifiers": {(DOMAIN, self._device["uuid"], self._device.get("hardware_id"))},
             "name": self._device["title"],
             "model": self._device["model"],
             "manufacturer": "FireBoard",
@@ -132,7 +135,7 @@ class FireBoardBatterySensor(CoordinatorEntity, Entity):
     @property
     def device_info(self):
         return {
-            "identifiers": {(DOMAIN, self._device["uuid"])} ,
+            "identifiers": {(DOMAIN, self._device["uuid"], self._device.get("hardware_id"))} ,
             "name": self._device["title"],
             "model": self._device["model"],
             "manufacturer": "FireBoard",
@@ -217,7 +220,7 @@ class FireBoardDrivePercentSensor(CoordinatorEntity, Entity):
     @property
     def device_info(self):
         return {
-            "identifiers": {(DOMAIN, self._device["uuid"])} ,
+            "identifiers": {(DOMAIN, self._device["uuid"], self._device.get("hardware_id"))} ,
             "name": self._device["title"],
             "model": self._device["model"],
             "manufacturer": "FireBoard",
@@ -260,7 +263,7 @@ class FireBoardDriveSetpointSensor(CoordinatorEntity, Entity):
     @property
     def device_info(self):
         return {
-            "identifiers": {(DOMAIN, self._device["uuid"])} ,
+            "identifiers": {(DOMAIN, self._device["uuid"], self._device.get("hardware_id"))} ,
             "name": self._device["title"],
             "model": self._device["model"],
             "manufacturer": "FireBoard",
@@ -298,7 +301,7 @@ class FireBoardDriveLidPausedSensor(CoordinatorEntity, Entity):
     @property
     def device_info(self):
         return {
-            "identifiers": {(DOMAIN, self._device["uuid"])} ,
+            "identifiers": {(DOMAIN, self._device["uuid"], self._device.get("hardware_id"))} ,
             "name": self._device["title"],
             "model": self._device["model"],
             "manufacturer": "FireBoard",
@@ -341,7 +344,7 @@ class FireBoardDriveControlChannelSensor(CoordinatorEntity, Entity):
     @property
     def device_info(self):
         return {
-            "identifiers": {(DOMAIN, self._device["uuid"])} ,
+            "identifiers": {(DOMAIN, self._device["uuid"], self._device.get("hardware_id"))} ,
             "name": self._device["title"],
             "model": self._device["model"],
             "manufacturer": "FireBoard",
