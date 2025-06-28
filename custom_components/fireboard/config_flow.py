@@ -1,251 +1,50 @@
-from homeassistant.helpers.entity import Entity
-from homeassistant.components.binary_sensor import BinarySensorEntity
-from homeassistant.components.number import NumberEntity
+import voluptuous as vol
+from homeassistant import config_entries
+from homeassistant.core import callback
+from homeassistant.const import CONF_USERNAME, CONF_PASSWORD
 from .const import DOMAIN
-from .coordinator import FireBoardCoordinator
-import logging
 
-_LOGGER = logging.getLogger(__name__)
+DATA_SCHEMA = vol.Schema({
+    vol.Required(CONF_USERNAME): str,
+    vol.Required(CONF_PASSWORD): str,
+    vol.Optional("update_interval", default=18): vol.All(vol.Coerce(int), vol.Range(min=18)),
+})
 
-async def async_setup_entry(hass, entry, async_add_entities):
-    api = hass.data[DOMAIN][entry.entry_id]
-    update_interval = getattr(api, 'update_interval', 18)
-    coordinator = FireBoardCoordinator(hass, api, update_interval)
-    await coordinator.async_config_entry_first_refresh()
-    entities = []
-    try:
-        for device in coordinator.devices:
-            uuid = device.get("uuid")
-            for channel in device.get("channels", []):
-                entities.append(FireBoardChannelSensor(coordinator, device, channel))
-                entities.append(FireBoardChannelMinTempNumber(coordinator, device, channel))
-                entities.append(FireBoardChannelMaxTempNumber(coordinator, device, channel))
-            entities.append(FireBoardBatterySensor(coordinator, device))
-    except Exception as e:
-        _LOGGER.error("FireBoard async_setup_entry failed: %s", e)
-    async_add_entities(entities)
+class FireBoardConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
+    async def async_step_user(self, user_input=None):
+        errors = {}
+        if user_input is not None:
+            # Validate credentials
+            from homeassistant.helpers.aiohttp_client import async_get_clientsession
+            from .api import FireBoardApiClient
+            session = async_get_clientsession(self.hass)
+            api = FireBoardApiClient(
+                user_input[CONF_USERNAME],
+                user_input[CONF_PASSWORD],
+                session,
+                user_input.get("update_interval", 18),
+            )
+            try:
+                await api.async_login()
+                return self.async_create_entry(title=user_input[CONF_USERNAME], data=user_input)
+            except Exception:
+                errors["base"] = "auth"
+        return self.async_show_form(step_id="user", data_schema=DATA_SCHEMA, errors=errors)
 
-class FireBoardChannelSensor(Entity):
-    def __init__(self, coordinator, device, channel):
-        self.coordinator = coordinator
-        self._device = device
-        self._channel = channel
-        model = device.get("model")
-        channel_label = channel.get("channel_label")
-        channel_num = channel.get("channel")
-        if model in ("FBX11", "FBX2", "FBX2D") and channel_label:
-            self._attr_name = f"Ch {channel_num}: {channel_label}"
-        else:
-            self._attr_name = f"{device['title']} {channel_label or channel_num}"
-        self._attr_unique_id = f"{device['uuid']}_ch{channel.get('id')}"
-        self._degreetype = device.get("degreetype", 2)  # 1 = C, 2 = F
+    @staticmethod
+    @callback
+    def async_get_options_flow(config_entry):
+        return FireBoardOptionsFlowHandler(config_entry)
 
-    @property
-    def name(self):
-        return self._attr_name
+class FireBoardOptionsFlowHandler(config_entries.OptionsFlow):
+    def __init__(self, config_entry):
+        self.config_entry = config_entry
 
-    @property
-    def unique_id(self):
-        return self._attr_unique_id
-
-    @property
-    def state(self):
-        temps = self.coordinator.channel_temps.get(self._device["uuid"], {})
-        value = temps.get(self._channel.get("channel"))
-        if value is None:
-            return "--"
-        return value
-
-    @property
-    def device_info(self):
-        return {
-            "identifiers": {(DOMAIN, self._device["uuid"])} ,
-            "name": self._device["title"],
-            "model": self._device["model"],
-            "manufacturer": "FireBoard",
-        }
-
-    @property
-    def extra_state_attributes(self):
-        return {
-            "channel_label": self._channel.get("channel_label"),
-            "color_hex": self._channel.get("color_hex"),
-            "enabled": self._channel.get("enabled"),
-            "state_class": "measurement",
-            "device_class": "temperature",
-            "icon": "mdi:thermometer",
-        }
-
-    @property
-    def state_class(self):
-        return "measurement"
-
-    @property
-    def device_class(self):
-        return "temperature"
-
-    @property
-    def icon(self):
-        return "mdi:thermometer"
-
-    @property
-    def unit_of_measurement(self):
-        return "°C" if self._degreetype == 1 else "°F"
-
-    async def async_update(self):
-        await self.coordinator.async_request_refresh()
-
-class FireBoardBatterySensor(Entity):
-    def __init__(self, coordinator, device):
-        self.coordinator = coordinator
-        self._device = device
-        self._attr_name = f"{device['title']} Battery"
-        self._attr_unique_id = f"{device['uuid']}_battery"
-
-    @property
-    def name(self):
-        return self._attr_name
-
-    @property
-    def unique_id(self):
-        return self._attr_unique_id
-
-    @property
-    def state(self):
-        value = self._device.get("last_battery_reading")
-        if value is None:
-            return None
-        try:
-            percent = round(float(value) * 100, 1)
-            return percent
-        except Exception:
-            return None
-
-    @property
-    def device_info(self):
-        return {
-            "identifiers": {(DOMAIN, self._device["uuid"])} ,
-            "name": self._device["title"],
-            "model": self._device["model"],
-            "manufacturer": "FireBoard",
-        }
-
-    @property
-    def state_class(self):
-        return "measurement"
-
-    @property
-    def unit_of_measurement(self):
-        return "%"
-
-    @property
-    def device_class(self):
-        return "battery"
-
-    @property
-    def icon(self):
-        value = self.state
-        if value is None:
-            return "mdi:battery-unknown"
-        try:
-            value = int(value)
-        except Exception:
-            return "mdi:battery-unknown"
-        if value >= 95:
-            return "mdi:battery"
-        elif value >= 90:
-            return "mdi:battery-90"
-        elif value >= 80:
-            return "mdi:battery-80"
-        elif value >= 70:
-            return "mdi:battery-70"
-        elif value >= 60:
-            return "mdi:battery-60"
-        elif value >= 50:
-            return "mdi:battery-50"
-        elif value >= 40:
-            return "mdi:battery-40"
-        elif value >= 30:
-            return "mdi:battery-30"
-        elif value >= 20:
-            return "mdi:battery-20"
-        elif value >= 10:
-            return "mdi:battery-10"
-        else:
-            return "mdi:battery-outline"
-
-class FireBoardChannelMinTempNumber(NumberEntity):
-    def __init__(self, coordinator, device, channel):
-        self.coordinator = coordinator
-        self._device = device
-        self._channel = channel
-        channel_num = channel.get("channel")
-        self._attr_name = f"Ch {channel_num}: Min Temp"
-        self._attr_unique_id = f"{device['uuid']}_ch{channel.get('id')}_min_temp"
-        self._degreetype = channel.get("degreetype", device.get("degreetype", 2))
-        self._attr_native_min_value = 0
-        self._attr_native_max_value = 572
-        self._attr_native_step = 1
-        self._attr_mode = "box"
-        self._attr_unit_of_measurement = "°C" if self._degreetype == 1 else "°F"
-        self._attr_icon = "mdi:thermometer-minus"
-        self._value = None
-
-    @property
-    def value(self):
-        return self._value
-
-    async def async_set_value(self, value):
-        self._value = value
-        self.async_write_ha_state()
-
-    @property
-    def extra_state_attributes(self):
-        return {
-            "initial": None,
-            "editable": True,
-            "min": 0,
-            "max": 572,
-            "step": 1,
-            "mode": "box",
-            "unit_of_measurement": self._attr_unit_of_measurement,
-            "icon": "mdi:thermometer-minus",
-        }
-
-class FireBoardChannelMaxTempNumber(NumberEntity):
-    def __init__(self, coordinator, device, channel):
-        self.coordinator = coordinator
-        self._device = device
-        self._channel = channel
-        channel_num = channel.get("channel")
-        self._attr_name = f"Ch {channel_num}: Max Temp"
-        self._attr_unique_id = f"{device['uuid']}_ch{channel.get('id')}_max_temp"
-        self._degreetype = channel.get("degreetype", device.get("degreetype", 2))
-        self._attr_native_min_value = 0
-        self._attr_native_max_value = 572
-        self._attr_native_step = 1
-        self._attr_mode = "box"
-        self._attr_unit_of_measurement = "°C" if self._degreetype == 1 else "°F"
-        self._attr_icon = "mdi:thermometer-minus"
-        self._value = None
-
-    @property
-    def value(self):
-        return self._value
-
-    async def async_set_value(self, value):
-        self._value = value
-        self.async_write_ha_state()
-
-    @property
-    def extra_state_attributes(self):
-        return {
-            "initial": None,
-            "editable": True,
-            "min": 0,
-            "max": 572,
-            "step": 1,
-            "mode": "box",
-            "unit_of_measurement": self._attr_unit_of_measurement,
-            "icon": "mdi:thermometer-minus",
-        }
+    async def async_step_init(self, user_input=None):
+        errors = {}
+        if user_input is not None:
+            return self.async_create_entry(title="", data=user_input)
+        options_schema = vol.Schema({
+            vol.Optional("update_interval", default=self.config_entry.options.get("update_interval", 18)): vol.All(vol.Coerce(int), vol.Range(min=18)),
+        })
+        return self.async_show_form(step_id="init", data_schema=options_schema, errors=errors)
