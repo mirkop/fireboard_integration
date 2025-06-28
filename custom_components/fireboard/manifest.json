@@ -7,5 +7,6 @@
   "dependencies": [ ],
   "config_flow": true,
   "codeowners": [ "@mirkop" ],
-  "issue_tracker": "https://github.com/mirkop/fireboard_integration/issues"
+  "issue_tracker": "https://github.com/mirkop/fireboard_integration/issues",
+  "homeassistant": ">=2021.6.0"
 }

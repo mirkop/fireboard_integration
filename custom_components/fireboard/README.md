@@ -15,7 +15,7 @@
   - `fireboard.refresh_last_session_chart`: Refresh last session chart data
 - All sensors and services are robust to API/network errors and respect FireBoard Cloud API best practices
 - All entities are grouped with their parent device for a clean UI
-- Compatible with Home Assistant 2025.1 and later
+- Compatible with Home Assistant 2021.6 and later
 
 ## Installation
 1. Copy the `fireboard` folder to your `custom_components` directory.
