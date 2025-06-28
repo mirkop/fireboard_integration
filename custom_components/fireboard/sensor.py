@@ -240,7 +240,7 @@ class FireBoardDriveSetpointSensor(Entity):
     @property
     def state(self):
         value = self._drive_data.get("setpoint")
-        if value is None:
+        if value is None or value == 0:
             return "--"
         return value
 
