@@ -121,3 +121,19 @@ class FireBoardApiClient:
         except Exception as e:
             _LOGGER.error("FireBoard get_channel_temps failed for %s: %s", device_uuid, e)
             return {}
+
+    async def async_get_drive_data(self, device_uuid):
+        await self._rate_limit_check()
+        if not self._token:
+            await self.async_login()
+        headers = self.get_auth_headers()
+        url = f"https://fireboard.io/api/v1/devices/{device_uuid}/drivelog.json"
+        try:
+            async with async_timeout.timeout(10):
+                async with self._session.get(url, headers=headers) as resp:
+                    resp.raise_for_status()
+                    data = await resp.json()
+                    return data if data else None
+        except Exception as e:
+            _LOGGER.error("FireBoard get_drive_data failed for %s: %s", device_uuid, e)
+            return None

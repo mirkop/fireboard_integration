@@ -15,19 +15,24 @@ class FireBoardCoordinator(DataUpdateCoordinator):
         self.api = api_client
         self.devices = []
         self.channel_temps = {}
+        self.drive_data = {}
 
     async def _async_update_data(self):
         try:
             self.devices = await self.api.async_get_devices()
-            # Fetch temps for all devices
+            # Fetch temps and drive data for all devices
             self.channel_temps = {}
+            self.drive_data = {}
             for device in self.devices:
                 uuid = device.get("uuid")
                 temps = await self.api.async_get_channel_temps(uuid)
                 self.channel_temps[uuid] = temps
+                drive = await self.api.async_get_drive_data(uuid)
+                self.drive_data[uuid] = drive
             return {
                 "devices": self.devices,
-                "channel_temps": self.channel_temps
+                "channel_temps": self.channel_temps,
+                "drive_data": self.drive_data
             }
         except Exception as err:
             raise UpdateFailed(f"Error updating FireBoard data: {err}")
