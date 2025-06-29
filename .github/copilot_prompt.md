@@ -15,10 +15,14 @@ This repository uses a custom Copilot prompt to help contributors write code tha
 - Write concise, well-documented code and avoid unnecessary complexity.
 - Ensure all new entities are properly associated with their parent device.
 - Use `mdi:` icons for Home Assistant entities.
-- Version numbers should be in the format `YYYY.MM.DD.COMMIT_COUNT` for commits.
+- Version numbers should be in the format `YYYY.MM.DD.HHMM` for commits.
 - Zero pad the month and day in the version number if necessary.
-- The version's `COMMIT_COUNT` is a three digit zero padded commit number.
+- The version's `HHMM` is the *current* UTC hour and minute, zero-padded (24-hour format). Always use UTC, not your local time. For example, if the current UTC time is 08:25, use `0825`; if it is 20:32, use `2032`.
 - Update the version number in the `hacs.json` and `manifest.json` files with each commit. Do not update this file.
+
+## Example FireBoard JSON Files
+- `json/device-real-time-temperature-data.jsonc` Contains real-time temperature data for FireBoard devices.
+- `json/device-real-time-drive-data.jsonc` Contains real-time drive data for FireBoard devices.
 
 ## References
 - [FireBoard Cloud API Documentation](https://docs.fireboard.io/app/api.html)

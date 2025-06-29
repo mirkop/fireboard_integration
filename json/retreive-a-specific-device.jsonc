@@ -1,0 +1,266 @@
+// REST Endpoint: GET https://fireboard.io/api/v1/devices/<UUID>.json
+{
+    "uuid": "fdff7eb8-c93f-4256-bf0c-e588392cbe37",
+    "id": 108177,
+    "title": "Macsaurus",
+    "hardware_id": "GHKK33R97",
+    "created": "2021-04-23T21:49:35.316Z",
+    "latest_temps": [
+        {
+            "created": "2025-06-28T20:13:44Z",
+            "channel": 1,
+            "temp": 71.1,
+            "degreetype": 2
+        },
+        {
+            "created": "2025-06-28T20:13:44Z",
+            "channel": 2,
+            "temp": 80.8,
+            "degreetype": 2
+        },
+        {
+            "created": "2025-06-28T20:13:44Z",
+            "channel": 3,
+            "temp": 81.7,
+            "degreetype": 2
+        },
+        {
+            "created": "2025-06-28T20:13:44Z",
+            "channel": 4,
+            "temp": 81.7,
+            "degreetype": 2
+        },
+        {
+            "created": "2025-06-28T20:13:44Z",
+            "channel": 5,
+            "temp": 50.7,
+            "degreetype": 2
+        },
+        {
+            "created": "2025-06-28T20:13:44Z",
+            "channel": 6,
+            "temp": 82.1,
+            "degreetype": 2
+        }
+    ],
+    "device_log": {
+        "cpuUsage": "149%",
+        "versionNode": "5.0.0",
+        "deviceID": "fdff7eb8-c93f-4256-bf0c-e588392cbe37",
+        "nightmode": false,
+        "drivesettings": "{\"p\":4,\"s\":1,\"d\":7,\"ms\":15,\"f\":0,\"l\":1}",
+        "publicIP": "99.42.212.84",
+        "vBattPer": 0.975452531375,
+        "macAP": "da:b3:70:12:12:42",
+        "versionImage": "201703260554",
+        "version": "4.1.15",
+        "ssid": "Mac IoT",
+        "txpower": 80,
+        "diskUsage": "0.4M/4.0M",
+        "tempFilter": "true",
+        "onboardTemp": 85.82,
+        "timeZoneBT": "America/New_York",
+        "versionEspHal": "HAL: V1R2;MSP: 1.9.0;",
+        "versionJava": "7.6.5",
+        "vBattPerRaw": 0.913,
+        "band": "802.11bgn",
+        "mode": "Managed",
+        "bleClientMAC": "48:4c:d3:af:86:c2",
+        "internalIP": "192.168.3.213",
+        "date": "2025-06-28 20:13:23 UTC",
+        "memUsage": "1.8M/4.2M",
+        "uptime": "1:38",
+        "signallevel": -32,
+        "commercialMode": "false",
+        "model": "FBX2",
+        "versionUtils": "6.1.3",
+        "macNIC": "7c:9e:bd:d1:1f:64",
+        "linkquality": "100/100",
+        "bleSignalLevel": -39,
+        "contrast": "7",
+        "auxPort": "fbfc-v1",
+        "vBatt": 4.207,
+        "frequency": "2.4 GHz",
+        "boardID": "GHKK33R97"
+    },
+    "last_templog": "2025-06-28T20:13:33Z",
+    "last_battery_reading": 0.975452531375,
+    "channels": [
+        {
+            "last_templog": {
+                "created": "2025-06-28T20:13:44Z",
+                "channel": 1,
+                "temp": 71.1,
+                "degreetype": 2
+            },
+            "channel": 1,
+            "id": 44709572,
+            "sessionid": 9255604,
+            "state": true,
+            "alerts": [],
+            "enabled": true,
+            "current_temp": 71.1,
+            "channel_label": "Meat",
+            "created": "2025-06-28T14:19:16Z",
+            "degreetype": 2,
+            "color_id": 9,
+            "color_hex": "E8A00C"
+        },
+        {
+            "last_templog": {
+                "created": "2025-06-28T20:13:44Z",
+                "channel": 2,
+                "temp": 80.8,
+                "degreetype": 2
+            },
+            "channel": 2,
+            "id": 44709573,
+            "sessionid": 9255604,
+            "state": true,
+            "alerts": [],
+            "enabled": true,
+            "current_temp": 80.8,
+            "channel_label": "More Meat",
+            "created": "2025-06-28T14:19:16Z",
+            "degreetype": 2,
+            "color_id": 10,
+            "color_hex": "FF8D00"
+        },
+        {
+            "last_templog": {
+                "created": "2025-06-28T20:13:44Z",
+                "channel": 3,
+                "temp": 81.7,
+                "degreetype": 2
+            },
+            "channel": 3,
+            "id": 44709574,
+            "sessionid": 9255604,
+            "state": true,
+            "alerts": [],
+            "enabled": true,
+            "current_temp": 81.7,
+            "channel_label": "Potato",
+            "created": "2025-06-28T14:19:16Z",
+            "degreetype": 2,
+            "color_id": 11,
+            "color_hex": "E8620C"
+        },
+        {
+            "last_templog": {
+                "created": "2025-06-28T20:13:44Z",
+                "channel": 4,
+                "temp": 81.7,
+                "degreetype": 2
+            },
+            "channel": 4,
+            "id": 44709575,
+            "sessionid": 9255604,
+            "state": true,
+            "alerts": [],
+            "enabled": true,
+            "current_temp": 81.7,
+            "channel_label": "Small Egg",
+            "created": "2025-06-28T14:19:16Z",
+            "degreetype": 2,
+            "color_id": 12,
+            "color_hex": "FF450D"
+        },
+        {
+            "last_templog": {
+                "created": "2025-06-28T20:13:44Z",
+                "channel": 5,
+                "temp": 50.7,
+                "degreetype": 2
+            },
+            "channel": 5,
+            "id": 44709576,
+            "sessionid": 9255604,
+            "state": true,
+            "alerts": [
+                {
+                    "notify_sms": false,
+                    "channel": 5,
+                    "notify_email": false,
+                    "id": 9594389,
+                    "session_id": 9255604,
+                    "temp_min": 200.0,
+                    "notify_app": true,
+                    "device_id": 108177,
+                    "enabled": true,
+                    "temp_max": 260.0,
+                    "time_stop": "23:59:59",
+                    "time_start": "00:00:01",
+                    "created": "2025-06-28T14:19:16Z",
+                    "minutes_buffer": 0,
+                    "minutes_repeat": 30
+                }
+            ],
+            "enabled": true,
+            "current_temp": 50.7,
+            "channel_label": "XL Egg",
+            "created": "2025-06-28T14:19:16Z",
+            "degreetype": 2,
+            "color_id": 13,
+            "color_hex": "98DF8A"
+        },
+        {
+            "last_templog": {
+                "created": "2025-06-28T20:13:44Z",
+                "channel": 6,
+                "temp": 82.1,
+                "degreetype": 2
+            },
+            "channel": 6,
+            "id": 44709577,
+            "sessionid": 9255604,
+            "state": true,
+            "alerts": [],
+            "enabled": true,
+            "current_temp": 82.1,
+            "channel_label": "Large Egg",
+            "created": "2025-06-28T14:19:16Z",
+            "degreetype": 2,
+            "color_id": 14,
+            "color_hex": "D62728"
+        }
+    ],
+    "fbj_version": "7.6.5",
+    "fbn_version": "5.0.0",
+    "fbu_version": "6.1.3",
+    "version": "4.1.15",
+    "probe_config": "8|0|0.0|8|0|0.0|8|0|0.0|8|0|0.0|8|0|0.0|8|0|0.0",
+    "last_drivelog": {
+        "var2": 4.168,
+        "tieddevice": "fdff7eb8-c93f-4256-bf0c-e588392cbe37",
+        "var3": 0.2416,
+        "id": 1316860936,
+        "setpoint": 0.0,
+        "device_id": 108177,
+        "vbatt": 4.20699999999999,
+        "pg_state": 0,
+        "modetype": 0,
+        "currenttemp": 0.0,
+        "degreetype": 2,
+        "pg_step_uuid": null,
+        "pg_step_index": null,
+        "profiletype": 0,
+        "var1": 0.0,
+        "powermode": 3,
+        "drivetype": 1,
+        "tiedchannel": 6,
+        "jsonraw": "{\"pt\":0,\"pErrSum\":0,\"pOut\":13.168035999999983,\"dr\":1,\"dt\":2,\"sp\":0,\"pLastTime\":5375231,\"c\":\"2025-06-28 20:13:36 UTC\",\"d\":0,\"mt\":0,\"pStable\":false,\"pKd\":0.1,\"vb\":4.2069999999999945,\"fanSpeedTarget\":0.9999999999999987,\"tc\":6,\"lidPaused\":false,\"pKi\":0.01,\"td\":\"fdff7eb8-c93f-4256-bf0c-e588392cbe37\",\"p\":1.0069889999999988,\"ct\":0,\"pLastErr\":0,\"pKp\":0.05,\"u\":false,\"programinfo\":{\"elapsed\":0,\"stepuuid\":null,\"lastupdated\":\"2025-06-28 18:34:58 UTC\",\"state\":0,\"uuid\":null,\"stepposition\":0},\"v1\":0,\"v2\":4.167999999999995,\"v3\":0.2415999999999997,\"pm\":3}",
+        "pg_elapsed": 0,
+        "driveper": 0.0,
+        "created": "2025-06-28T20:13:36Z",
+        "userinitiated": false,
+        "pg_step_position": 0,
+        "pg_uuid": null
+    },
+    "channel_count": 6,
+    "degreetype": 2,
+    "model": "FBX2",
+    "model_name": "FireBoard 2",
+    "active": true,
+    "auto_session": true
+}

@@ -6,6 +6,9 @@
 - Sensors for battery (as percentage), WiFi signal (dBm), and onboard temperature (°F or °C)
 - Min/Max temperature configuration entities for each channel (shown in device configuration section)
 - Session sensors: total session count, last session info (with attributes), and last session chart data
+- Real-time drive data sensors: drive percent, setpoint, grill lid (open/closed), control channel
+- Channel temperature entity_id uses `ch_<channel>_<hardware_id>` for uniqueness
+- Device info includes hardware ID for all entities
 - Rate limit enforcement (200 calls/hour, minimum 18s update interval)
 - Error handling and diagnostics
 - Localization support (English)
@@ -27,7 +30,7 @@
 - Update interval (minimum 18 seconds, enforced by API rate limit)
 
 ## Entities Provided
-- **Channel Sensors:** One per channel, shows live temperature (°F or °C)
+- **Channel Sensors:** One per channel, shows live temperature (°F or °C), entity_id is `ch_<channel>_<hardware_id>`
 - **Min/Max Temp Numbers:** One pair per channel, shown as configuration entities, grouped with device
 - **Battery Sensor:** One per device, shows last battery reading as percentage (%)
 - **WiFi Signal Sensor:** One per device, shows WiFi signal level (dBm)
@@ -35,6 +38,10 @@
 - **Session Count Sensor:** Shows total number of sessions
 - **Last Session Sensor:** Shows most recent session info (title, duration, times, description, devices)
 - **Last Session Chart Sensor:** Shows number of chart data points and exposes chart data as attributes
+- **Drive Percent Sensor:** Shows current drive fan percent
+- **Drive Setpoint Sensor:** Shows current drive setpoint
+- **Grill Lid Sensor:** Shows grill lid state (Open/Closed)
+- **Control Channel Sensor:** Shows which channel is controlling the drive
 
 ## Entity Attributes
 - **Battery Sensor:**

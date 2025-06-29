@@ -1,0 +1,39 @@
+// REST Endpoint: GET https://fireboard.io/api/v1/devices/<UUID>/temps.json
+[
+    {
+        "created": "2025-06-28T18:13:23Z",
+        "channel": 1,
+        "temp": 71.9,
+        "degreetype": 2
+    },
+    {
+        "created": "2025-06-28T18:13:23Z",
+        "channel": 2,
+        "temp": 80.6,
+        "degreetype": 2
+    },
+    {
+        "created": "2025-06-28T18:13:23Z",
+        "channel": 3,
+        "temp": 81.0,
+        "degreetype": 2
+    },
+    {
+        "created": "2025-06-28T18:13:23Z",
+        "channel": 4,
+        "temp": 80.0,
+        "degreetype": 2
+    },
+    {
+        "created": "2025-06-28T18:13:23Z",
+        "channel": 5,
+        "temp": 48.0,
+        "degreetype": 2
+    },
+    {
+        "created": "2025-06-28T18:13:23Z",
+        "channel": 6,
+        "temp": 81.8,
+        "degreetype": 2
+    }
+]

@@ -18,12 +18,20 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
         session,
     )
     hass.data[DOMAIN][entry.entry_id] = api
-    # Forward setup to sensor platform (use correct method for recent Home Assistant)
-    await hass.config_entries.async_forward_entry_setups(entry, ["sensor"])
+    # Set up coordinator and store for switch platform
+    from .coordinator import FireBoardCoordinator
+    update_interval = getattr(api, 'update_interval', 18)
+    coordinator = FireBoardCoordinator(hass, api, update_interval)
+    hass.data[DOMAIN][f"coordinator_{entry.entry_id}"] = coordinator
+    await coordinator.async_config_entry_first_refresh()
+    # Forward setup to sensor and switch platforms (plural)
+    await hass.config_entries.async_forward_entry_setups(entry, ["sensor", "switch"])
     return True
 
 async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry):
     """Unload a config entry."""
     await hass.config_entries.async_forward_entry_unload(entry, "sensor")
+    await hass.config_entries.async_forward_entry_unload(entry, "switch")
     hass.data[DOMAIN].pop(entry.entry_id)
+    hass.data[DOMAIN].pop(f"coordinator_{entry.entry_id}", None)
     return True
